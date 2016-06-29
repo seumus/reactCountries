@@ -2,16 +2,10 @@ var React = require('react');
 var PropTypes = React.PropTypes;
 
 var CountryDisplay = React.createClass({
-  borderInfo: function(border) {
-    for(var country of this.props.countries){
-      if(country.alpha3Code === border) {
-        return (<p key={country.alpha3Code}>{country.name} - {country.population}</p>)
-      }
-    }
-  },
+
   render: function() {
     var borders = this.props.display.borders.map(function(border){
-      return this.borderInfo(border);
+      return this.props.borderInfo(border);
     }.bind(this))
 
     return (

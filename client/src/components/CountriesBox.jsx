@@ -21,12 +21,26 @@ var CountriesBox = React.createClass({
     for(var country of this.state.setCountries) {
       if(country.region === region) {
         data.push(country)
-        // console.log('t',country.region);
-        // console.log('w',region);
       }
     }
     // console.log(data);
     this.setState({countries: data})
+  },
+  borderInfo: function(border) {
+    for(var country of this.state.countries){
+      if(country.alpha3Code === border) {
+        return (<p key={country.alpha3Code}>{country.name} - {country.population}</p>)
+      }
+    }
+  },
+  findRegions: function(data) {
+    var regions = [];
+    for (var i = 0; i < data.length; i++) {
+      if(regions.indexOf(data[i].region) === -1) {
+        regions.push(data[i].region);
+      }
+    }
+    return regions
   },
   componentDidMount: function() {
     console.log('CDM was called');
@@ -35,25 +49,18 @@ var CountriesBox = React.createClass({
     request.open('GET', url);
     request.onload = function() {
       var data = JSON.parse(request.responseText);
-      var regions = [];
-      for (var i = 0; i < data.length; i++) {
-        if(regions.indexOf(data[i].region) === -1) {
-          regions.push(data[i].region);
-        }
-      }
+      var regions = this.findRegions(data);
       this.setState({setCountries: data})
       this.setState({countries: data})
       this.setState({regions: regions})
     }.bind(this)
     request.send();
   },
-  findRegions: function() {
 
-  },
   render: function() {
     var displayElement = <h4 className='france'> No Country Selected</h4>
     if(this.state.displayCountry){
-      displayElement = <CountryDisplay countries={this.state.countries} display={this.state.displayCountry}/>
+      displayElement = <CountryDisplay borderInfo={this.borderInfo} display={this.state.displayCountry}/>
     }
     return (
       <div className='cheese'>

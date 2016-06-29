@@ -19725,8 +19725,6 @@
 	
 	        if (country.region === region) {
 	          data.push(country);
-	          // console.log('t',country.region);
-	          // console.log('w',region);
 	        }
 	      }
 	      // console.log(data);
@@ -19747,6 +19745,49 @@
 	
 	    this.setState({ countries: data });
 	  },
+	  borderInfo: function borderInfo(border) {
+	    var _iteratorNormalCompletion2 = true;
+	    var _didIteratorError2 = false;
+	    var _iteratorError2 = undefined;
+	
+	    try {
+	      for (var _iterator2 = this.state.countries[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	        var country = _step2.value;
+	
+	        if (country.alpha3Code === border) {
+	          return React.createElement(
+	            'p',
+	            { key: country.alpha3Code },
+	            country.name,
+	            ' - ',
+	            country.population
+	          );
+	        }
+	      }
+	    } catch (err) {
+	      _didIteratorError2 = true;
+	      _iteratorError2 = err;
+	    } finally {
+	      try {
+	        if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	          _iterator2.return();
+	        }
+	      } finally {
+	        if (_didIteratorError2) {
+	          throw _iteratorError2;
+	        }
+	      }
+	    }
+	  },
+	  findRegions: function findRegions(data) {
+	    var regions = [];
+	    for (var i = 0; i < data.length; i++) {
+	      if (regions.indexOf(data[i].region) === -1) {
+	        regions.push(data[i].region);
+	      }
+	    }
+	    return regions;
+	  },
 	  componentDidMount: function componentDidMount() {
 	    console.log('CDM was called');
 	    var url = 'https://restcountries.eu/rest/v1/all';
@@ -19754,19 +19795,14 @@
 	    request.open('GET', url);
 	    request.onload = function () {
 	      var data = JSON.parse(request.responseText);
-	      var regions = [];
-	      for (var i = 0; i < data.length; i++) {
-	        if (regions.indexOf(data[i].region) === -1) {
-	          regions.push(data[i].region);
-	        }
-	      }
+	      var regions = this.findRegions(data);
 	      this.setState({ setCountries: data });
 	      this.setState({ countries: data });
 	      this.setState({ regions: regions });
 	    }.bind(this);
 	    request.send();
 	  },
-	  findRegions: function findRegions() {},
+	
 	  render: function render() {
 	    var displayElement = React.createElement(
 	      'h4',
@@ -19774,7 +19810,7 @@
 	      ' No Country Selected'
 	    );
 	    if (this.state.displayCountry) {
-	      displayElement = React.createElement(CountryDisplay, { countries: this.state.countries, display: this.state.displayCountry });
+	      displayElement = React.createElement(CountryDisplay, { borderInfo: this.borderInfo, display: this.state.displayCountry });
 	    }
 	    return React.createElement(
 	      'div',
@@ -19856,43 +19892,10 @@
 	var CountryDisplay = React.createClass({
 	  displayName: 'CountryDisplay',
 	
-	  borderInfo: function borderInfo(border) {
-	    var _iteratorNormalCompletion = true;
-	    var _didIteratorError = false;
-	    var _iteratorError = undefined;
 	
-	    try {
-	      for (var _iterator = this.props.countries[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	        var country = _step.value;
-	
-	        if (country.alpha3Code === border) {
-	          return React.createElement(
-	            'p',
-	            { key: country.alpha3Code },
-	            country.name,
-	            ' - ',
-	            country.population
-	          );
-	        }
-	      }
-	    } catch (err) {
-	      _didIteratorError = true;
-	      _iteratorError = err;
-	    } finally {
-	      try {
-	        if (!_iteratorNormalCompletion && _iterator.return) {
-	          _iterator.return();
-	        }
-	      } finally {
-	        if (_didIteratorError) {
-	          throw _iteratorError;
-	        }
-	      }
-	    }
-	  },
 	  render: function render() {
 	    var borders = this.props.display.borders.map(function (border) {
-	      return this.borderInfo(border);
+	      return this.props.borderInfo(border);
 	    }.bind(this));
 	
 	    return React.createElement(
