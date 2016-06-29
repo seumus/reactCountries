@@ -19725,10 +19725,11 @@
 	
 	        if (country.region === region) {
 	          data.push(country);
-	          console.log('t', country.region);
-	          console.log('w', region);
+	          // console.log('t',country.region);
+	          // console.log('w',region);
 	        }
 	      }
+	      // console.log(data);
 	    } catch (err) {
 	      _didIteratorError = true;
 	      _iteratorError = err;
@@ -19744,7 +19745,6 @@
 	      }
 	    }
 	
-	    console.log(data);
 	    this.setState({ countries: data });
 	  },
 	  componentDidMount: function componentDidMount() {
@@ -19862,18 +19862,16 @@
 	    var _iteratorError = undefined;
 	
 	    try {
-	
 	      for (var _iterator = this.props.countries[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 	        var country = _step.value;
 	
-	        // console.log('aaa', border);
-	        // console.log('bbb', country.alpha3Code);
 	        if (country.alpha3Code === border) {
-	
 	          return React.createElement(
 	            'p',
 	            { key: country.alpha3Code },
-	            country.name
+	            country.name,
+	            ' - ',
+	            country.population
 	          );
 	        }
 	      }
@@ -19893,12 +19891,8 @@
 	    }
 	  },
 	  render: function render() {
-	    // console.log('t',this);
 	    var borders = this.props.display.borders.map(function (border) {
-	      // console.log('t1', this);
 	      return this.borderInfo(border);
-	
-	      // return (<p key={border}>{border}{tree}</p>)
 	    }.bind(this));
 	
 	    return React.createElement(

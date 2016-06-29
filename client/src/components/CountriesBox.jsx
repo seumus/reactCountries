@@ -21,11 +21,11 @@ var CountriesBox = React.createClass({
     for(var country of this.state.setCountries) {
       if(country.region === region) {
         data.push(country)
-        console.log('t',country.region);
-        console.log('w',region);
+        // console.log('t',country.region);
+        // console.log('w',region);
       }
     }
-    console.log(data);
+    // console.log(data);
     this.setState({countries: data})
   },
   componentDidMount: function() {
